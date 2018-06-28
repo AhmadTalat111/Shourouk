@@ -1,0 +1,67 @@
+package com.example.android.shorouk;
+
+import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+/**
+ * Created by hp on 07/10/2017.
+ */
+
+public class ShopsAdapter extends ArrayAdapter<Shop> {
+    public ShopsAdapter(Activity context, ArrayList<Shop> Shops) {
+        // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
+        // the second argument is used when the ArrayAdapter is populating a single TextView.
+        // Because this is a custom adapter for two TextViews and an ImageView, the adapter is not
+        // going to use this second argument, so it can be any value. Here, we used 0.
+        super(context, 0, Shops);
+    }
+
+    @NonNull
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // Check if the existing view is being reused, otherwise inflate the view
+        View listItemView = convertView;
+        if (listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(
+                    R.layout.list_attractions, parent, false);
+
+        }
+
+        // Get the {@link AndroidFlavor} object located at this position in the list
+        Shop currentShop = getItem(position);
+
+        // Find the TextView in the list_item.xml layout with the ID version_name
+        TextView nameTextView = (TextView) listItemView.findViewById(R.id.shop);
+        // Get the version name from the current AndroidFlavor object and
+        // set this text on the name TextView
+        nameTextView.setText(currentShop.getShop());
+
+        // Find the TextView in the list_item.xml layout with the ID version_number
+        TextView descriptionTextView = (TextView) listItemView.findViewById(R.id.description);
+        // Get the version number from the current AndroidFlavor object and
+        // set this text on the number TextView
+        descriptionTextView.setText(currentShop.getDescrption());
+        ImageView iconView = (ImageView) listItemView.findViewById(R.id.image);
+        if (currentShop.hasImage()) {
+
+            iconView.setImageResource(currentShop.getImageResourceId());
+            iconView.setVisibility(View.VISIBLE);
+
+        } else {
+            iconView.setVisibility(View.GONE);
+        }
+
+        // Return the whole list item layout (containing 2 TextViews and an ImageView)
+        // so that it can be shown in the ListView
+        return listItemView;
+    }
+
+}
